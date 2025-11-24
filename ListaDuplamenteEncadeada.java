@@ -1,7 +1,7 @@
 class ListaDuplamenteEncadeada {
 
-    private Nodo inicio;
-    private Nodo fim;
+    private Palavra inicio;
+    private Palavra fim;
     private int nElementos;
 
     public ListaDuplamenteEncadeada() {
@@ -20,9 +20,9 @@ class ListaDuplamenteEncadeada {
 
     public void imprime() {
         System.out.print("[");
-        Nodo cursor = this.inicio;
+        Palavra cursor = this.inicio;
         for (int i = 0; i < this.nElementos; i++) {
-            System.out.print(cursor.elemento + " ");
+            System.out.print(cursor.palavra + " ");
             cursor = cursor.proximo;
         }
         System.out.println("]");
@@ -30,17 +30,17 @@ class ListaDuplamenteEncadeada {
 
     public void imprimeInverso() {
         System.out.print("[");
-        Nodo cursor = this.fim;
+        Palavra cursor = this.fim;
         for (int i = 0; i < this.nElementos; i++) {
-            System.out.print(cursor.elemento + " ");
+            System.out.print(cursor.palavra + " ");
             cursor = cursor.anterior;
         }
         System.out.println("]");
     }
 
-    public void insereInicio(int elemento) {
+    public void insereInicio(String elemento, int linha) {
 
-        Nodo novo = new Nodo(elemento);
+        Palavra novo = new Palavra(elemento, linha);
 
         if (this.estaVazia()) {
             this.fim = novo;
@@ -54,33 +54,33 @@ class ListaDuplamenteEncadeada {
 
     }
 
-    public Integer removeInicio() {
+    public String removeInicio() {
 
         if (this.estaVazia()) {
             System.out.println("Lista vazia. Não é possível remover.");
             return null;
         }
 
-        Nodo nodoRemovido = this.inicio;
+        Palavra palavraRemovido = this.inicio;
 
         if (this.nElementos == 1) {
             this.inicio = null;
             this.fim = null;
         } else {
-            this.inicio = nodoRemovido.proximo;
+            this.inicio = palavraRemovido.proximo;
             this.inicio.anterior = null;
 
-            nodoRemovido.proximo = null;
+            palavraRemovido.proximo = null;
         }
 
         this.nElementos--;
 
-        return nodoRemovido.elemento;
+        return palavraRemovido.palavra;
     }
 
-    public void insereFinal(int elemento) {
+    public void insereFinal(String elemento, int linha) {
 
-        Nodo novo = new Nodo(elemento);
+        Palavra novo = new Palavra(elemento, linha);
 
         if (this.estaVazia()) {
             this.inicio = novo;
@@ -94,14 +94,14 @@ class ListaDuplamenteEncadeada {
         this.nElementos++;
     }
 
-    public Integer removeFinal() {
+    public String removeFinal() {
 
         if (this.estaVazia()) {
             System.out.println("Lista vazia. Não é possível remover.");
             return null;
         }
 
-        Nodo nodoRemovido = this.fim;
+        Palavra palavraRemovido = this.fim;
 
         if (this.nElementos == 1) {
 
@@ -109,18 +109,18 @@ class ListaDuplamenteEncadeada {
             this.fim = null;
         } else {
 
-            this.fim = nodoRemovido.anterior;
+            this.fim = palavraRemovido.anterior;
 
-            nodoRemovido.anterior.proximo = null;
-            nodoRemovido.anterior = null;
+            palavraRemovido.anterior.proximo = null;
+            palavraRemovido.anterior = null;
         }
 
         this.nElementos--;
 
-        return nodoRemovido.elemento;
+        return palavraRemovido.palavra;
     }
 
-    public void inserePosicao(int elemento, int pos) {
+    public void inserePosicao(String elemento, int linha, int pos) {
 
         if (pos < 0) {
             System.out.println("Posição negativa. Não é possível inserir.");
@@ -131,16 +131,15 @@ class ListaDuplamenteEncadeada {
         }
 
         if (pos == 0) {
-            this.insereInicio(elemento);
+            this.insereInicio(elemento, linha);
             return;
         } else if (pos == this.nElementos) {
-            this.insereFinal(elemento);
+            this.insereFinal(elemento, linha);
             return;
         }
 
-        Nodo novo = new Nodo(elemento);
-
-        Nodo cursor = this.inicio;
+        Palavra novo = new Palavra(elemento, linha);
+        Palavra cursor = this.inicio;
         for (int i = 1; i <= pos; i++) {
             cursor = cursor.proximo;
         }
@@ -155,7 +154,7 @@ class ListaDuplamenteEncadeada {
 
     }
 
-    public Integer removePosicao(int pos) {
+    public String removePosicao(int pos) {
 
         if (this.estaVazia()) {
             System.out.println("Lista vazia. Não é possível remover.");
@@ -174,38 +173,37 @@ class ListaDuplamenteEncadeada {
             return this.removeFinal();
         }
 
-        Nodo cursor = this.inicio;
+        Palavra cursor = this.inicio;
         for (int i = 1; i <= pos; i++) {
             cursor = cursor.proximo;
         }
 
-        Nodo nodoRemovido = cursor;
+        Palavra palavraRemovido = cursor;
 
-        nodoRemovido.anterior.proximo = nodoRemovido.proximo;
-        nodoRemovido.proximo.anterior = nodoRemovido.anterior;
+        palavraRemovido.anterior.proximo = palavraRemovido.proximo;
+        palavraRemovido.proximo.anterior = palavraRemovido.anterior;
 
-        nodoRemovido.anterior = null;
-        nodoRemovido.proximo = null;
+        palavraRemovido.anterior = null;
+        palavraRemovido.proximo = null;
 
         this.nElementos--;
 
-        return nodoRemovido.elemento;
-
+        return palavraRemovido.palavra;
     }
 
-    public void insereOrdenado(int elemento) {
+    public void insereOrdenado(String elemento, int linha) {
 
         if (this.estaVazia()) {
-            this.insereInicio(elemento);
+            this.insereInicio(elemento, linha);
             return;
         }
 
         boolean flagInseriu = false;
 
-        Nodo cursor = this.inicio;
+        Palavra cursor = this.inicio;
         for (int i = 0; i < this.nElementos; i++) {
-            if (cursor.elemento > elemento) {
-                this.inserePosicao(elemento, i);
+            if (cursor.palavra.compareTo(elemento) > 0) {
+                this.inserePosicao(elemento, linha, i);
                 flagInseriu = true;
                 break;
             }
@@ -213,16 +211,16 @@ class ListaDuplamenteEncadeada {
         }
 
         if (!flagInseriu) {
-            this.insereFinal(elemento);
+            this.insereFinal(elemento, linha);
         }
     }
 
-    public boolean removeElemento(int elemento) {
+    public boolean removeElemento(String elemento) {
 
-        Nodo cursor = this.inicio;
+        Palavra cursor = this.inicio;
         int i;
         for (i = 0; i < this.nElementos; i++) {
-            if (cursor.elemento == elemento) {
+            if (cursor.palavra.equals(elemento)) {
                 break;
             }
             cursor = cursor.proximo;
@@ -238,26 +236,25 @@ class ListaDuplamenteEncadeada {
 
     }
 
-    public Integer acesse(int pos) {
+    public String acesse(int pos) {
 
         if (pos < 0 || pos >= this.nElementos) {
             return null;
         }
 
-        Nodo cursor = this.inicio;
+        Palavra cursor = this.inicio;
         for (int i = 0; i < pos; i++) {
             cursor = cursor.proximo;
         }
 
-        return cursor.elemento;
+        return cursor.palavra;
 
     }
 
-    public boolean contem(int elemento) {
-
-        Nodo cursor = this.inicio;
+    public boolean contem(String elemento) {
+        Palavra cursor = this.inicio;
         for (int i = 0; i < this.nElementos; i++) {
-            if (cursor.elemento == elemento) {
+            if (cursor.palavra.equals(elemento)) {
                 return true;
             }
             cursor = cursor.proximo;
